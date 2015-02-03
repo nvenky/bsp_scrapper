@@ -1,0 +1,2 @@
+m = MetaInspector.new("http://www.betfairpromo.com/betfairsp/prices")
+m.links.raw.take(10).each{|f| Downloader.new.perform_async(f)}
