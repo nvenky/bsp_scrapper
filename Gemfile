@@ -29,7 +29,7 @@ gem 'spring',        group: :development
 gem 'metainspector'
 gem 'sidekiq'
 gem 'sinatra', :require => nil
-
+gem 'cequel'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
