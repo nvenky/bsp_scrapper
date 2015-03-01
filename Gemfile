@@ -28,6 +28,7 @@ gem 'spring',        group: :development
 
 gem 'metainspector'
 gem 'sidekiq'
+gem 'sidekiq-failures'
 gem 'sinatra', :require => nil
 gem 'cequel'
 # Use ActiveModel has_secure_password

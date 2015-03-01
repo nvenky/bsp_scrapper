@@ -4,8 +4,9 @@ class ResultParser
     include Sidekiq::Worker
     
     def perform(filename)
+        bsp_file = BspFiles.find_by_filename(filename)
         dir = 'bsp_files'
-        CSV.foreach("#{dir}/#{filename}", headers: true, 
+        CSV.foreach("#{dir}/#{filename}", headers: true,
                     header_converters: lambda {|h| h.strip.downcase.to_sym}, 
                     converters: lambda{|r| r.nil? ? nil : r.strip}) do |row|
             next unless numeric?(row[:event_id])
@@ -17,12 +18,18 @@ class ResultParser
                          race_type: market[1] == 'prices' ? 'horse' : market[1],
                          country: (market[2] || 'uk').upcase, 
                          market_type: (market[3] || 'win').upcase,
+                         win_lose: race_data['win_lose'].to_i, #Handle cases where data is 0.0000, 1.0000
                          processed: false
                         }
-            RaceResult.create!(race_data.merge(meta_data))
-            file_status =BspFiles.find(filename)
-            file_status.update_attributes!(processed: true)
+            begin
+             RaceResults.create!(race_data.merge(meta_data))
+            rescue Exception
+                raise "Failed to insert data - #{race_data.inspect}"
+            end
+
         end 
+        bsp_file.update_attributes!(processed: true)
+        bsp_file.post_process_file
     end
 
     def numeric?(num)

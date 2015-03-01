@@ -5,3 +5,10 @@ http://localhost:3000/sidekiq/
 Start Sidekiq workers:
 bundle exec sidekiq
 
+
+rake cequel:migrate
+
+
+Scrapper.new.scrape
+BspFiles.process
+RaceResults.post_process

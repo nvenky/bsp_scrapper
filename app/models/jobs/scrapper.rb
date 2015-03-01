@@ -1,6 +1,6 @@
 class Scrapper
     def scrape
-        links.each{|f| Downloader.perform_async(f) }
+        links.take(5000).each{|f| Downloader.perform_async(f) }
     end
     
     def scrape_sample

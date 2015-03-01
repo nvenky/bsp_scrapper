@@ -4,7 +4,7 @@ class ResultPostProcessor
     include Sidekiq::Worker
     
     def perform(event_id)
-        race_results = RaceResult.where(event_id: event_id)
+        race_results = RaceResults.where(event_id: event_id)
         sorted_results = race_results.select{|res| !res.bsp.nil?}.sort_by{|res| res.bsp}
         no_of_runners = sorted_results.size
         sorted_results.each_with_index do |result, index|
